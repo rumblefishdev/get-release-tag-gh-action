@@ -25,21 +25,27 @@ def output(release):
 
 
 # Releases parsing
+found = False
 for release in releases:
-    if wanted_release == 'stable' and package in release.tag_name:
-        if release.prerelease == 0 and release.draft == 0:
+    print(f'Checking release: {release.tag_name}')  # Debugging log
+    if package in release.tag_name:
+        if wanted_release == 'stable' and not release.prerelease and not release.draft:
             output(release)
+            found = True
             break
-    elif wanted_release == 'prerelease' and package in release.tag_name:
-        if release.prerelease == 1:
+        elif wanted_release == 'prerelease' and release.prerelease:
             output(release)
+            found = True
             break
-    elif wanted_release == 'latest' and package in release.tag_name:
-        output(release)
-        break
-    elif wanted_release == 'nodraft' and package in release.tag_name:
-        if release.draft == 0:
+        elif wanted_release == 'latest':
             output(release)
+            found = True
             break
-    else:
-        print('Can\'t get release')
+        elif wanted_release == 'nodraft' and not release.draft:
+            output(release)
+            found = True
+            break
+
+if not found:
+    print('Can\'t get release')
+
