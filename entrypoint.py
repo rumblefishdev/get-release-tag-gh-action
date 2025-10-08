@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from github import Github
+from github import Github, Auth
 import os
 
 # Settings
@@ -10,7 +10,8 @@ token = os.getenv('token', None)
 package = os.getenv('package')
 
 # Init class
-G = Github(token)
+auth = Auth.Token(token)
+G = Github(auth=auth)
 repo = G.get_repo(repository)
 releases = repo.get_releases()
 
